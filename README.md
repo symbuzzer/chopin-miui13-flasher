@@ -3,7 +3,7 @@ MIUI 13 fastboot firmware flasher for POCO X3 GT / REDMI NOTE 10 PRO 5G
   
 HOW TO USE:  
 -Extract and copy Android Platform Tools to same directory with *.bat file  
--Create \images\ folder
+-Create \images\ folder  
 -Open fastboot rom file with Winrar (or alternate) and copy all contents of the images folder to created images folder  
 -Double click to run *.bat file and follow instructions  
   
