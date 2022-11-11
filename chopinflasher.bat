@@ -1,6 +1,42 @@
-fastboot erase boot_ab || @echo "Erase boot error"
-fastboot erase expdb || @echo "Erase expdb error"
+@echo off
+set ver=1.10
+color 0a
+title Chopin MIUI 13 Flasher Script v%ver% by Ali BEYAZ
+echo.
+echo Welcome to Chopin Flasher Script. Do it at your own risk.
+echo Go fastboot mode on your phone to begin.
+echo.
+goto checksdkfiles
+
+:checksdkfiles
+if not exist adb.exe goto notsdkfound
+if not exist fastboot.exe goto notsdkfound
+if not exist AdbWinApi.dll goto notsdkfound
+if not exist AdbWinUsbApi.dll goto notsdkfound
+goto userdata
+
+:userdata
+echo If you want to do flash a different region ROM, you should erase USERDATA.
+set /P c=Do you want to ERASE USERDATA [Y/N]?
+if /I "%c%" EQU "Y" goto erase
+if /I "%c%" EQU "N" goto noterase
+goto userdata
+
+:erase
+echo Erasing USERDATA
 fastboot erase metadata || @echo "Erase metadata error"
+fastboot flash userdata         images\userdata.img          || @echo "Flash userdata error"
+goto startflashing
+
+:noterase
+echo Saving USERDATA
+goto startflashing
+
+:startflashing
+echo.
+echo Flashing...
+if exist images\boot.img fastboot erase boot_ab || @echo "Erase boot error"
+fastboot erase expdb || @echo "Erase expdb error"
 fastboot flash preloader_ab images\preloader_chopin.bin  || @echo "Flash preloader error"
 fastboot flash lk_ab        images\lk.img         || @echo "Flash lk        error"
 fastboot flash dpm_ab     images\dpm.img        || @echo "Flash dpm       error"
@@ -14,25 +50,42 @@ fastboot flash dtbo_ab      images\dtbo.img       || @echo "Flash dtbo      erro
 fastboot flash spmfw_ab     images\spmfw.img      || @echo "Flash spmfw     error"
 fastboot flash mcupm_ab   images\mcupm.img      || @echo "Flash mcupm     error"
 fastboot flash pi_img_ab    images\pi_img.img     || @echo "Flash pi_img    error"
-::fastboot flash oem_misc1 images\oem_misc1.img  || @echo "Flash oem_misc1 error"
 fastboot flash md1img_ab    images\md1img.img     || @echo "Flash md1img    error"
 fastboot flash cam_vpu1_ab  images\cam_vpu1.img   || @echo "Flash cam_vpu1  error"
 fastboot flash cam_vpu2_ab  images\cam_vpu2.img   || @echo "Flash cam_vpu2  error"
 fastboot flash cam_vpu3_ab  images\cam_vpu3.img   || @echo "Flash cam_vpu3  error"
 fastboot flash audio_dsp_ab images\audio_dsp.img  || @echo "Flash audio_dsp error"
-
 fastboot flash super            images\super.img             || @echo "Flash super    error"
 fastboot flash rescue           images\rescue.img            || @echo "Flash rescue   error"
-::fastboot flash cache            images\cache.img             || @echo "Flash cache    error"
-::fastboot flash recovery         images\recovery.img          || @echo "Flash recovery error"
-::fastboot flash cust             images\cust.img              || @echo "Flash cust     error"
 fastboot flash vbmeta_ab           images\vbmeta.img            || @echo "Flash vbmeta   error"
 fastboot flash vbmeta_system_ab    images\vbmeta_system.img     || @echo "Flash vbmeta_system   error"
 fastboot flash vbmeta_vendor_ab    images\vbmeta_vendor.img     || @echo "Flash vbmeta_vendor   error"
 fastboot flash cust         		images\cust.img        		|| @echo "Flash cust 			error"
-fastboot flash userdata         images\userdata.img          || @echo "Flash userdata error"
 fastboot flash boot_ab             images\boot.img              || @echo "Flash boot     error"
 fastboot oem cdms
 fastboot set_active a  || @echo "set_active a error"
 fastboot reboot || @echo "Reboot error"
+echo.
+echo Success!
+echo.
+goto verityconfirm
 
+:verityconfirm
+set /P c=Do you want to DISABLE VERITY [Y/N]?
+if /I "%c%" EQU "Y" goto verity
+if /I "%c%" EQU "N" goto exit
+goto verityconfirm
+
+:verity
+fastboot flash vbmeta --disable-verity --disable-verification vbmeta.img|| @echo "Disable verity is not success. Check vbmeta.img"
+goto exit
+
+:notsdkfound
+echo Make sure extract Android Platform Tools files on same directory with *.bat file and rerun script again.
+echo.
+goto exit
+
+:exit
+sdk\fastboot reboot
+pause
+exit
