@@ -11,4 +11,3 @@ NOTES:
 -Only works MIUI 13.x roms  
 -Device should be bootloader unlocked  
 -You can download Android Platform Tools from: https://developer.android.com/studio/releases/platform-tools  
--Predefined setup will wipe your userdata. To prevent this add "::" to before "fastboot flash userdata images\userdata.img" command  
