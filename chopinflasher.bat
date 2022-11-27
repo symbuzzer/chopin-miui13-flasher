@@ -1,18 +1,11 @@
 @echo off
-set ver=1.10
+set ver=1.11
 color 0a
 title Chopin MIUI 13 Flasher Script v%ver% by Ali BEYAZ
 echo.
 echo Welcome to Chopin Flasher Script. Do it at your own risk.
 echo Go fastboot mode on your phone to begin.
 echo.
-goto checksdkfiles
-
-:checksdkfiles
-if not exist adb.exe goto notsdkfound
-if not exist fastboot.exe goto notsdkfound
-if not exist AdbWinApi.dll goto notsdkfound
-if not exist AdbWinUsbApi.dll goto notsdkfound
 goto userdata
 
 :userdata
@@ -78,11 +71,6 @@ goto verityconfirm
 
 :verity
 fastboot flash vbmeta --disable-verity --disable-verification vbmeta.img|| @echo "Disable verity is not success. Check vbmeta.img"
-goto exit
-
-:notsdkfound
-echo Make sure extract Android Platform Tools files on same directory with *.bat file and rerun script again.
-echo.
 goto exit
 
 :exit
