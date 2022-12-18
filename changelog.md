@@ -1,5 +1,8 @@
 CHANGELOG:  
   
+v1.12:  
+-Fixed all strings  
+  
 v1.11:  
  -Codes cleaned  
   
