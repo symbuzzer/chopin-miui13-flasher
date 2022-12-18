@@ -1,5 +1,8 @@
 CHANGELOG:  
   
+v1.13:  
+-Fixed reboot command  
+  
 v1.12:  
 -Fixed all strings  
   
