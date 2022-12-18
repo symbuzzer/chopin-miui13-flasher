@@ -1,5 +1,5 @@
 @echo off
-set ver=1.12
+set ver=1.13
 color 0a
 title Chopin MIUI 13 Flasher Script v%ver% by Ali BEYAZ
 echo.
@@ -74,6 +74,6 @@ fastboot flash vbmeta --disable-verity --disable-verification vbmeta.img || @ech
 goto exit
 
 :exit
-sdk\fastboot reboot
+fastboot reboot
 pause
 exit
